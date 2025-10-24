@@ -2,21 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Log In</title>
+  <title>Home</title>
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <% if (locals.user) {%>
-    <h1>WELCOME BACK <%= user.username %></h1>
-    <a href="/log-out">LOG OUT</a>
+<% if (user && user.admin === true) { %>
+  <h1>WELCOME <%= user.first_name %> <%= user.last_name %> — YOU ARE ADMIN</h1>
+  <a href="/log-out">Log Out</a>
+  <a href="/createMessage">New Message</a>
+
+  <h2>Messages:</h2>
+  <% if (messages.length === 0) { %>
+    <p>No messages yet.</p>
   <% } else { %>
-    <h1>please log in</h1>
-    <form action="/log-in" method="POST">
-      <label for="username">Username</label>
-      <input id="username" name="username" placeholder="username" type="text" />
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" />
-      <button type="submit">Log In</button>
-    </form>
-  <%}%>
+    <% messages.forEach(message => { %>
+      <div style="border: 1px solid black; margin: 10px; padding: 10px;">
+        <h3><%= message.title %></h3>
+        <p><%= message.text %></p>
+        <p>Posted by: <%= message.username %></p>
+        <form action="/deleteMessage" method="POST" style="margin-top: 10px;">
+          <input type="hidden" name="messageId" value="<%= message.id %>">
+          <button type="submit">Delete Message</button>
+        </form>
+      </div>
+    <% }) %>
+  <% } %>
+
+<% } else if (user) { %>
+  <h1>WELCOME <%= user.first_name %> <%= user.last_name %></h1>
+  <a href="/log-out">Log Out</a>
+  <a href="/createMessage">New Message</a>
+
+  <form action="/become-admin" method="POST">
+    <h2>Become Admin</h2>
+    <label for="adminPassword">Admin Password:</label>
+    <input type="password" name="adminPassword" id="adminPassword" placeholder="Admin Password" required>
+    <button type="submit">Become Admin</button>
+  </form>
+
+  <h2>Messages:</h2>
+  <% if (messages.length === 0) { %>
+    <p>No messages yet.</p>
+  <% } else { %>
+    <% messages.forEach(message => { %>
+      <div style="border: 1px solid black; margin: 10px; padding: 10px;">
+        <h3><%= message.title %></h3>
+        <p><%= message.text %></p>
+        <p>Posted by: <%= message.username %></p>
+      </div>
+    <% }) %>
+  <% } %>
+
+<% } else { %>
+  <h1>Welcome Guest</h1>
+  <a href="/log-in">Log In</a> | <a href="/sign-up">Sign Up</a>
+<% } %>
 </body>
 </html>

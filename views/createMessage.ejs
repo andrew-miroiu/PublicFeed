@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>New message</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Create a new message</h1>
+<form action="/createMessage" method="POST">
+    <label for="title">Title:</label>
+    <input id="title" name="title" type="text" required>
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" required></textarea>
+    <button type="submit">Submit</button>
+</form>
+<a href="/">Back to Home</a>
+    
+</body>
+</html>
